@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Best Didi 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- RESET & VARIABLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #fff0f5;
+            --color-primary: #ff8fa3;
+            --color-secondary: #c9cbff;
+            --color-text: #5d4037;
+            --color-white: #ffffff;
+            --shadow: 0 10px 30px rgba(255, 143, 163, 0.3);
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #fff0f5 0%, #e0eafc 100%);
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling during animations */
+            color: var(--color-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        /* --- BACKGROUND FLOATING HEARTS --- */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 143, 163, 0.4);
+            font-size: 2rem;
+            animation: floatUp linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* --- CONTAINER & SCREENS --- */
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            height: 100%;
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease;
+            padding: 2rem;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        .screen.hidden {
+            transform: translateY(-20px);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 0px #fff;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: #7a6660;
+        }
+
+        .emoji-lg {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Nunito', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 143, 163, 0.5);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* --- PAGE 2 SPECIFIC --- */
+        .compliment-box {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            width: 100%;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .compliment-box.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* --- PAGE 3 GIFT BOX SVG --- */
+        .gift-container {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .gift-container:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .shake {
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both infinite;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .modal-overlay.open .modal {
+            transform: scale(1);
+        }
+
+        .modal h2 {
+            font-size: 1.5rem;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+
+        .modal p {
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+        .modal-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-yes {
+            background: #4ecdc4;
+        }
+        
+        .btn-no {
+            background: #ff6b6b;
+        }
+
+        /* --- SUCCESS STATE --- */
+        .success-content {
+            display: none;
+        }
+        .success-content.visible {
+            display: block;
+            animation: popIn 0.8s;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0) rotate(-2deg); }
+            20%, 80% { transform: translate3d(2px, 0, 0) rotate(2deg); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0) rotate(-4deg); }
+            40%, 60% { transform: translate3d(4px, 0, 0) rotate(4deg); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* --- CANVAS FOR CONFETTI --- */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- BACKGROUND ANIMATION CONTAINER -->
+    <div id="hearts-container"></div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="app-container">
+        
+        <!-- PAGE 1: WELCOME -->
+        <div id="screen-1" class="screen active">
+            <span class="emoji-lg">👋</span>
+            <h1>Welcome Best Didi 💖</h1>
+            <p>Iss website ka ek chhota sa reason hai… <br> Par pehle thoda sa pyaar accept kar lo 😄</p>
+            <button class="btn" onclick="goToScreen(2)">Aage Chalein 👉</button>
+        </div>
+
+        <!-- PAGE 2: COMPLIMENTS -->
+        <div id="screen-2" class="screen">
+            <div class="compliment-box" id="comp-1">
+                <h3>💖 Caring</h3>
+                <p>Duniya ki sabse caring didi</p>
+            </div>
+            <div class="compliment-box" id="comp-2">
+                <h3>💫 Supportive</h3>
+                <p>Hamesha support karne wali</p>
+            </div>
+            <div class="compliment-box" id="comp-3">
+                <h3>🏧 My ATM</h3>
+                <p>Meri personal ATM (thoda sa 😜)</p>
+            </div>
+            <div class="compliment-box" id="comp-4">
+                <h3>❤️ Favourite</h3>
+                <p>Aur meri favourite human</p>
+            </div>
+            
+            <button class="btn" id="btn-screen-2" style="opacity: 0; transition: opacity 0.5s;" onclick="goToScreen(3)">Surprise Dekhein 🎁</button>
+        </div>
+
+        <!-- PAGE 3: THE GIFT & REQUEST -->
+        <div id="screen-3" class="screen">
+            
+            <!-- Initial Gift State -->
+            <div id="gift-state">
+                <h1>Surprise for You!</h1>
+                <p>Click the gift to open</p>
+                
+                <div class="gift-container shake" onclick="openPopup()">
+                    <!-- Simple SVG Gift Box -->
+                    <svg width="150" height="150" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Box Base -->
+                        <rect x="20" y="40" width="60" height="50" rx="4" fill="#FF8FA3"/>
+                        <!-- Box Stripe Vertical -->
+                        <rect x="45" y="40" width="10" height="50" fill="#FFF"/>
+                        <!-- Lid -->
+                        <rect x="15" y="30" width="70" height="15" rx="2" fill="#FF6B81"/>
+                        <!-- Lid Stripe -->
+                        <rect x="45" y="30" width="10" height="15" fill="#FFF"/>
+                        <!-- Bow -->
+                        <path d="M50 30 C30 10 20 30 50 30 C80 30 70 10 50 30" stroke="#FFF" stroke-width="5" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <div id="success-state" class="success-content">
+                <span class="emoji-lg">🎉💰🎉</span>
+                <h1>Best Didi Ever! 😭❤️</h1>
+                <p style="font-size: 1.3rem;">Maan gayi! <br> UPI ID bhej raha hoon WhatsApp pe 😁</p>
+                <div style="font-size: 0.8rem; opacity: 0.7;">(Screenshots le liya hai, mukarna mat)</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL POPUP -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🥺</div>
+            <h2 id="modal-title">Ek Chhoti Request</h2>
+            <p id="modal-text">Didi, dosto ke saath bahar jaana hai. <br> <b>₹500</b> mil sakta hai kya?</p>
+            
+            <div class="modal-btns">
+                <button class="btn btn-yes" onclick="acceptRequest()">Bhej rahi hu 💖</button>
+                <button class="btn btn-no" onclick="rejectRequest()">Nahi bhej rahi 😅</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- 1. BACKGROUND HEARTS ANIMATION --- */
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            const heartCount = 15;
+            const emojis = ['💖', '✨', '🌸', '💕'];
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('bg-heart');
+                heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 4 + 's'; // 4-7s duration
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        /* --- 2. SCREEN NAVIGATION --- */
+        function goToScreen(screenNumber) {
+            // Hide current active screens
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+                setTimeout(() => {
+                    if(!s.classList.contains('active')) s.classList.add('hidden');
+                }, 800);
+            });
+
+            // Show new screen
+            const nextScreen = document.getElementById(`screen-${screenNumber}`);
+            nextScreen.classList.remove('hidden');
+            // Small delay to allow 'hidden' class removal to take effect before opacity transition
+            setTimeout(() => {
+                nextScreen.classList.add('active');
+            }, 50);
+
+            // Special Logic for Screen 2 (Animations)
+            if (screenNumber === 2) {
+                playCompliments();
+            }
+        }
+
+        /* --- 3. COMPLIMENT SEQUENCE --- */
+        function playCompliments() {
+            const compliments = [
+                document.getElementById('comp-1'),
+                document.getElementById('comp-2'),
+                document.getElementById('comp-3'),
+                document.getElementById('comp-4')
+            ];
+
+            let delay = 500;
+            compliments.forEach((comp, index) => {
+                setTimeout(() => {
+                    comp.classList.add('show');
+                }, delay);
+                delay += 1200; // 1.2s gap between cards
+            });
+
+            // Show button after all compliments
+            setTimeout(() => {
+                document.getElementById('btn-screen-2').style.opacity = '1';
+            }, delay);
+        }
+
+        /* --- 4. POPUP LOGIC --- */
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalText = document.getElementById('modal-text');
+        
+        function openPopup() {
+            modalOverlay.classList.add('open');
+        }
+
+        function closePopup() {
+            modalOverlay.classList.remove('open');
+        }
+
+        let rejectCount = 0;
+        const funnyMessages = [
+            "Didi please 🥺 ek baar phir soch lo",
+            "Arey aise mat karo 😭",
+            "Main aapka pyara bhai hu na? ❤️",
+            "Bas 500 hi toh hai... pizza khaunga 🍕",
+            "Maan jao na... bhagwan bhala karega 🙏"
+        ];
+
+        function rejectRequest() {
+            closePopup();
+            
+            // Loop logic
+            setTimeout(() => {
+                // Change text based on how many times she clicked No
+                const messageIndex = rejectCount % funnyMessages.length;
+                modalText.innerHTML = funnyMessages[messageIndex];
+                rejectCount++;
+                openPopup();
+            }, 1000); // 1 second delay re-appear
+        }
+
+        function acceptRequest() {
+            closePopup();
+            // Hide Gift State
+            document.getElementById('gift-state').style.display = 'none';
+            // Show Success State
+            document.getElementById('success-state').classList.add('visible');
+            // Trigger Confetti
+            startConfetti();
+        }
+
+        /* --- 5. CONFETTI ENGINE (Vanilla JS) --- */
+        function startConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const particleCount = 150;
+            const colors = ['#ff8fa3', '#c9cbff', '#ffd700', '#64e7db'];
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speedY: Math.random() * 3 + 2,
+                    speedX: Math.random() * 2 - 1,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 5 - 2
+                });
+            }
+
+            function animateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(p => {
+                    ctx.save();
+                    ctx.fillStyle = p.color;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.rotation += p.rotationSpeed;
+
+                    if (p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+
+                requestAnimationFrame(animateConfetti);
+            }
+
+            animateConfetti();
+        }
+        
+        // Handle Resize for Canvas
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('confetti-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+    </script>
+</body>
+</html>
+
